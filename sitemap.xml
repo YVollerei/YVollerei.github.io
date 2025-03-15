@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://yvollerei.github.io/live2d_models/mita/%E7%B1%B3%E5%A1%94.model3.json</loc>
+    <loc>https://yvollerei.github.io/live2d_models/mita/%E7%B1%B3%E5%A1%94.cdi3.json</loc>
     
     <lastmod>2025-03-12</lastmod>
     
@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://yvollerei.github.io/live2d_models/mita/%E7%B1%B3%E5%A1%94.cdi3.json</loc>
+    <loc>https://yvollerei.github.io/live2d_models/mita/%E7%B1%B3%E5%A1%94.model3.json</loc>
     
     <lastmod>2025-03-12</lastmod>
     
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>https://yvollerei.github.io/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).cdi3.json</loc>
+    <loc>https://yvollerei.github.io/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).model3.json</loc>
     
     <lastmod>2025-03-03</lastmod>
     
@@ -83,7 +83,7 @@
   </url>
   
   <url>
-    <loc>https://yvollerei.github.io/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).model3.json</loc>
+    <loc>https://yvollerei.github.io/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).cdi3.json</loc>
     
     <lastmod>2025-03-03</lastmod>
     
@@ -110,7 +110,7 @@
   </url>
   
   <url>
-    <loc>https://yvollerei.github.io/live2d_models/Murasame/exp/exp5.exp3.json</loc>
+    <loc>https://yvollerei.github.io/live2d_models/Murasame/exp/exp6.exp3.json</loc>
     
     <lastmod>2021-12-09</lastmod>
     
@@ -119,7 +119,7 @@
   </url>
   
   <url>
-    <loc>https://yvollerei.github.io/live2d_models/Murasame/exp/exp6.exp3.json</loc>
+    <loc>https://yvollerei.github.io/live2d_models/Murasame/exp/exp5.exp3.json</loc>
     
     <lastmod>2021-12-09</lastmod>
     
@@ -292,7 +292,7 @@
 
   <url>
     <loc>https://yvollerei.github.io/</loc>
-    <lastmod>2025-03-14</lastmod>
+    <lastmod>2025-03-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -302,7 +302,7 @@
   
   <url>
     <loc>https://yvollerei.github.io/categories/%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2025-03-14</lastmod>
+    <lastmod>2025-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
