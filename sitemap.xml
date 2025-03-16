@@ -2,6 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://atelieryu.site/notion-hexo/</loc>
+    
+    <lastmod>2025-03-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://atelieryu.site/about/index.html</loc>
+    
+    <lastmod>2025-03-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://atelieryu.site/link/index.html</loc>
+    
+    <lastmod>2025-03-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://atelieryu.site/posts/bb92517d.html</loc>
     
     <lastmod>2025-03-15</lastmod>
@@ -65,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://atelieryu.site/live2d_models/mita/%E7%B1%B3%E5%A1%94.cdi3.json</loc>
+    <loc>https://atelieryu.site/live2d_models/mita/%E7%B1%B3%E5%A1%94.model3.json</loc>
     
     <lastmod>2025-03-12</lastmod>
     
@@ -74,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://atelieryu.site/live2d_models/mita/%E7%B1%B3%E5%A1%94.model3.json</loc>
+    <loc>https://atelieryu.site/live2d_models/mita/%E7%B1%B3%E5%A1%94.cdi3.json</loc>
     
     <lastmod>2025-03-12</lastmod>
     
@@ -92,7 +119,7 @@
   </url>
   
   <url>
-    <loc>https://atelieryu.site/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).cdi3.json</loc>
+    <loc>https://atelieryu.site/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).model3.json</loc>
     
     <lastmod>2025-03-03</lastmod>
     
@@ -101,7 +128,7 @@
   </url>
   
   <url>
-    <loc>https://atelieryu.site/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).model3.json</loc>
+    <loc>https://atelieryu.site/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).cdi3.json</loc>
     
     <lastmod>2025-03-03</lastmod>
     
@@ -113,6 +140,15 @@
     <loc>https://atelieryu.site/live2d_models/%E9%98%BF%E7%B1%B3%E5%A8%85/%E9%98%BF%E7%B1%B3%E5%A8%85(1).physics3.json</loc>
     
     <lastmod>2025-03-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://atelieryu.site/categories/index.html</loc>
+    
+    <lastmod>2023-11-16</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -307,10 +343,19 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://atelieryu.site/tags/index.html</loc>
+    
+    <lastmod>2021-07-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   <url>
     <loc>https://atelieryu.site/</loc>
-    <lastmod>2025-03-15</lastmod>
+    <lastmod>2025-03-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -318,7 +363,28 @@
   
   <url>
     <loc>https://atelieryu.site/tags/%E8%BF%BD%E7%95%AA%E8%AE%B0%E5%BD%95/</loc>
-    <lastmod>2025-03-15</lastmod>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://atelieryu.site/tags/elog/</loc>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://atelieryu.site/tags/notion/</loc>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://atelieryu.site/tags/hexo/</loc>
+    <lastmod>2025-03-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -327,14 +393,21 @@
   
   <url>
     <loc>https://atelieryu.site/categories/ACGN/</loc>
-    <lastmod>2025-03-15</lastmod>
+    <lastmod>2025-03-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://atelieryu.site/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2025-03-15</lastmod>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://atelieryu.site/categories/%E6%8A%80%E6%9C%AF%E9%9A%8F%E8%AE%B0/</loc>
+    <lastmod>2025-03-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
