@@ -1,0 +1,514 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>自建Nas内网穿透——ZeroTier/FRP | Yu的炼金工房</title><meta name="author" content="Yu"><meta name="copyright" content="Yu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="六月份入手了一台群晖Nas。由于群晖自带的内网穿透不太好用（连接不稳定，无法访问套件），所以准备自己搭内网穿透，尝试了几种方法，简单记录一下。 ZeroTierZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。 创">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自建Nas内网穿透——ZeroTier&#x2F;FRP">
+<meta property="og:url" content="https://atelieryu.site/posts/a72a568d.html">
+<meta property="og:site_name" content="Yu的炼金工房">
+<meta property="og:description" content="六月份入手了一台群晖Nas。由于群晖自带的内网穿透不太好用（连接不稳定，无法访问套件），所以准备自己搭内网穿透，尝试了几种方法，简单记录一下。 ZeroTierZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。 创">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://atelieryu.xyz/elog/202506/b8b24bcfd6ef35d87082dd5a4a7a0685.gif">
+<meta property="article:published_time" content="2025-08-04T11:21:00.000Z">
+<meta property="article:modified_time" content="2025-08-05T12:35:00.000Z">
+<meta property="article:author" content="Yu">
+<meta property="article:tag" content="Nas">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://atelieryu.xyz/elog/202506/b8b24bcfd6ef35d87082dd5a4a7a0685.gif"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "自建Nas内网穿透——ZeroTier/FRP",
+  "url": "https://atelieryu.site/posts/a72a568d.html",
+  "image": "https://atelieryu.xyz/elog/202506/b8b24bcfd6ef35d87082dd5a4a7a0685.gif",
+  "datePublished": "2025-08-04T11:21:00.000Z",
+  "dateModified": "2025-08-05T12:35:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yu",
+      "url": "https://atelieryu.site/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://atelieryu.xyz/PicGo/shizuku.png"><link rel="canonical" href="https://atelieryu.site/posts/a72a568d.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#3F4F44')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '自建Nas内网穿透——ZeroTier/FRP',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><script src="https://fastly.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script><link rel="stylesheet" href="/css/corner-indicator.css" /><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script><script src="https://fastly.jsdelivr.net/combine/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js,npm/pixi.js@6.5.2/dist/browser/pixi.min.js,npm/pixi-live2d-display/dist/index.min.js,gh/Weidows-projects/Live2dLoader/dist/Live2dLoader.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/css/runtime/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Yu的炼金工房" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/PicGo/kurumi.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shouye"></use></svg><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/bangumis/index.html"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-bilibili-pink"></use></svg><span> 追番</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-xinfeng"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-chaxun"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://atelieryu.xyz/elog/202506/b8b24bcfd6ef35d87082dd5a4a7a0685.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/PicGo/shizuku_logo.png" alt="Logo"><span class="site-name">Yu的炼金工房</span></a><a class="nav-page-title" href="/"><span class="site-name">自建Nas内网穿透——ZeroTier/FRP</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shouye"></use></svg><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/bangumis/index.html"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-bilibili-pink"></use></svg><span> 追番</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-xinfeng"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-chaxun"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">自建Nas内网穿透——ZeroTier/FRP</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-04T11:21:00.000Z" title="发表于 2025-08-04 19:21:00">2025-08-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-05T12:35:00.000Z" title="更新于 2025-08-05 20:35:00">2025-08-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E9%9A%8F%E8%AE%B0/">技术随记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.5k</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>六月份入手了一台群晖Nas。由于群晖自带的内网穿透不太好用（连接不稳定，无法访问套件），所以准备自己搭内网穿透，尝试了几种方法，简单记录一下。</p>
+<h1 id="ZeroTier"><a href="#ZeroTier" class="headerlink" title="ZeroTier"></a>ZeroTier</h1><p>ZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。</p>
+<h2 id="创建私人网络"><a href="#创建私人网络" class="headerlink" title="创建私人网络"></a>创建私人网络</h2><p>首先在ZeroTier<a target="_blank" rel="noopener" href="https://my.zerotier.com/">控制台</a>注册一个账号，点击Create Network创建网络。</p>
+<p>记住这里的NETWORK ID，它是你的私人网络在互联网中的标识</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/ee353de79fbaf07c1a966137fd292a95.png" alt="ZeroTier控制台首页"></p>
+<h2 id="PC操作"><a href="#PC操作" class="headerlink" title="PC操作"></a>PC操作</h2><p>在<a target="_blank" rel="noopener" href="https://www.zerotier.com/">官网</a>下载一个ZeroTier客户端并启动（傻瓜式安装，这里不再赘述）</p>
+<p>打开客户端后在Window右下角的后台程序中应该能看到ZeroTier已经启动了，点击Join New Network，输入上一步的NETWORK ID</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/c045bb1da03b5fae60f2d99bebfefd6e.png" alt="ZeroTier客户端"></p>
+<p>之后需要在控制台中进行验证。上述步骤完成后控制台的Members中应该会出现一个新设备，可以比对上一步的My Address和Member中的Address来判断是否是目标设备（Address就是ZeroTier给每台设备分配的唯一标识号）</p>
+<p>左侧勾选，点击Authorize即可完成认证。这样目标设备就正式加入了虚拟局域网。同一虚拟局域网的设备使用分配的Managed IP是可以ping通的</p>
+<p>网络ID+控制台验证，这让ZeroTier的安全性达到了一个比较可靠的程度。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/1ac2c4a37138940bd86078dd9f7e4428.png" alt="ZeroTier认证"></p>
+<h2 id="Nas操作"><a href="#Nas操作" class="headerlink" title="Nas操作"></a>Nas操作</h2><p>博主使用的群晖Nas，社区套件提供了比较快捷的安装方式，其他Nas品牌可以尝试通过docker安装ZeroTier，流程应该是大差不差的。（套件使用的是矿神源，安装方式请自行查询）</p>
+<p>由于ZeroTier需要以root权限运行，所以需要先下载一个权限管理器</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/7e872a4490fd63d54ba57fcb6d7b38a0.png" alt="权限管理器套件"></p>
+<p>之后安装ZeroTier套件，安装时会让你输入Network ID，同理填入你的私人网路ID即可。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/b0c639f56802ea3b02e1b1bf3ccc8996.png" alt="ZeroTier套件"></p>
+<p>之后在控制台进行认证即可，操作同PC。</p>
+<p>之后就可以直接使用ZeroTier分配的虚拟局域网IP访问你的Nas啦，由于原理就是虚拟局域网，所以所有操作都与在本地局域网内相同。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/c727c1a35055eadf0c3e1eeb0e638a91.png" alt="成功通过虚拟局域网IP访问Nas"></p>
+<h2 id="Moon服务器"><a href="#Moon服务器" class="headerlink" title="Moon服务器"></a>Moon服务器</h2><p>由于不同设备间握手还需要经过中转服务器（即官方说的Planet服务器），所以在连接安全性与稳定性上还可提升，方法就是自建一个中转服务器，即官方说的Moon服务器。理论上是挺好的，但我自建下来没有提升，反而导致我设备间连不通了，于是放弃了该方法。</p>
+<h1 id="FRP"><a href="#FRP" class="headerlink" title="FRP"></a>FRP</h1><p>上面提到ZeroTier的稳定性受中转服务器、设备间跳数等因素影响，其实连接不是很稳定（在我校园网的环境下时常连不通，或传输速率慢）。于是准备寻找替代方法，最后选择了较为成熟的FRP</p>
+<p>FRP本质上是一种反向代理操作，所以需要一台公网可访问的服务器作为代理服务器。</p>
+<p>FRP的搭建分为FRPS（FRP Server）和FRPC（FRP Client）两部分。说白了就是将FRP的服务端与客户端程序分配部署到服务器与设备上，然后分别填写配置文件。</p>
+<ul>
+<li>操作参考了以下博客：<a target="_blank" rel="noopener" href="https://gitee.com/spoto/natserver">https://gitee.com/spoto/natserver</a></li>
+<li>frp官方文档：<a target="_blank" rel="noopener" href="https://gofrp.org/zh-cn/">https://gofrp.org/zh-cn/</a></li>
+</ul>
+<h2 id="服务端部署（FRPS）"><a href="#服务端部署（FRPS）" class="headerlink" title="服务端部署（FRPS）"></a>服务端部署（FRPS）</h2><p>服务端就是你用来做反向代理的服务器。</p>
+<h3 id="创建配置文件"><a href="#创建配置文件" class="headerlink" title="创建配置文件"></a>创建配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建存放目录</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /etc/frp</span><br><span class="line"><span class="comment"># 创建frps.toml文件</span></span><br><span class="line">nano /etc/frp/frps.toml</span><br></pre></td></tr></table></figure>
+
+
+<p>frps.toml配置文件内容参考（虽然是toml，但为了兼容性仍然使用ini文件的格式）：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="comment"># 监听端口</span></span><br><span class="line"><span class="attr">bind_port</span> = xxxxx</span><br><span class="line"><span class="comment"># 面板端口</span></span><br><span class="line"><span class="attr">dashboard_port</span> = xxxxx</span><br><span class="line"><span class="comment"># 登录面板账号设置</span></span><br><span class="line"><span class="attr">dashboard_user</span> = xxxxx</span><br><span class="line"><span class="attr">dashboard_pwd</span> = xxxxx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 身份验证</span></span><br><span class="line"><span class="attr">token</span> = xxxxxx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>bind_port：监听端口，frp通过该端口提供反向代理服务，推荐修改为一个小众端口</li>
+<li>dashboard_port：面板端口，用于frp流量监控，保持默认即可</li>
+<li>token：身份验证，frp客户端配置文件中填入相同token才能获取frps服务，能一定程度提升安全性</li>
+</ul>
+<h3 id="docker安装frps"><a href="#docker安装frps" class="headerlink" title="docker安装frps"></a>docker安装frps</h3><figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#服务器镜像：snowdreamtech/frps</span></span><br><span class="line"><span class="comment">#重启：always</span></span><br><span class="line"><span class="comment">#网络模式：host</span></span><br><span class="line"><span class="comment">#文件映射：/etc/frp/frps.toml:/etc/frp/frps.toml</span></span><br><span class="line"></span><br><span class="line">docker run <span class="attr">--restart</span>=always --network host -d -v /etc/frp/frps.toml:/etc/frp/frps.toml --name frps snowdreamtech/frps</span><br></pre></td></tr></table></figure>
+
+
+<p>这样frps就配置完成了</p>
+<h2 id="Nas部署（frpc）"><a href="#Nas部署（frpc）" class="headerlink" title="Nas部署（frpc）"></a>Nas部署（frpc）</h2><h3 id="创建配置文件-1"><a href="#创建配置文件-1" class="headerlink" title="创建配置文件"></a>创建配置文件</h3><p>在docker文件夹下创建frp文件夹，并在目录下新建一个frpc.toml文件</p>
+<p>frpc.toml配置文件内容参考：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">server_addr</span> = <span class="string">&#x27;你的服务器公网IP&#x27;</span></span><br><span class="line"><span class="attr">server_port</span> = <span class="string">&#x27;服务器frps.toml配置文件中设置的bind_port&#x27;</span></span><br><span class="line"><span class="attr">token</span> = <span class="string">&#x27;服务器frps.toml配置文件中设置的token&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dsm]</span></span><br><span class="line"><span class="attr">type</span> = tcp</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="string">&#x27;dsm登录端口&#x27;</span></span><br><span class="line"><span class="attr">remote_port</span> = <span class="string">&#x27;服务器上任意空闲端口&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>[common]<ul>
+<li>frpc通用配置，按注释中配置即可</li>
+</ul>
+</li>
+<li>[dsm]<ul>
+<li>[dsm]：服务名，名字可以随意取，但不能重复</li>
+<li>local_port：Nas上需要内网穿透的服务端口，这里希望内网穿透登录界面，所以绑定了登录端口（登录端口可以在<code>控制面板→系统→登录门户→网页服务</code>中设置，推荐使用HTTPS）</li>
+<li>remote_port：服务器上的绑定Nas服务的端口，设置好后访问<code>服务器IP:remote_port</code>就等于访问<code>Nas的localhost:local_port</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="安装frpc"><a href="#安装frpc" class="headerlink" title="安装frpc"></a>安装frpc</h3><p>Nas上通过Container Manager安装</p>
+<p>在镜像仓库中搜索<code>snowdreamtech/frps</code> ，在映像中点击运行，下面是配置界面：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/0a87ac07c5a8d4a490930bb009d83e53.png" alt="容器配置1"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/11db5d54c1004badb5e659b86ee49c36.png" alt="容器配置2"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/2afc25b6d793fe430dea8920fda0ae0f.png" alt="容器配置3"></p>
+<p>配置完成后容器就运行起来了，配置文件错误或服务器设置错误的话应该运行两下就会弹窗告诉你容器运行失败，这时可以通过容器运行日志来进行修复：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/33a14348961b40512a225d3d30f8c8e0.png" alt="容器运行日志"></p>
+<p>常见的坑有端口没对应好、服务器防火墙没放行端口等。</p>
+<p>现在，你已经可以通过<code>服务器IP:remote_port</code> 在异地访问登录你的Nas啦！</p>
+<h2 id="服务器反向代理绑定子域名"><a href="#服务器反向代理绑定子域名" class="headerlink" title="服务器反向代理绑定子域名"></a>服务器反向代理绑定子域名</h2><p>通过IP+端口的访问感觉还是不够优雅，能不能通过域名访问Nas呢？当然是可以的！这里提供服务器上Nginx的反向代理实现这一功能。</p>
+<p>为了操作方便，所以操作使用宝塔面板完成，面板的安装请自行搜索</p>
+<h3 id="创建站点"><a href="#创建站点" class="headerlink" title="创建站点"></a>创建站点</h3><p>首先创建一个站点，域名里填上你想要使用的子域名。由于该域名仅用作反代，PHP版本选择纯静态</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/c48ac23cc041af3dfb3693114451cbe3.png" alt="建站"></p>
+<h3 id="Nginx反向代理"><a href="#Nginx反向代理" class="headerlink" title="Nginx反向代理"></a>Nginx反向代理</h3><p>在宝塔面板中打开刚刚创建站点的设置界面，反向代理界面中点击添加反向代理，配置见下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/4e64052b81d21d71804155b4cde5ea78.png" alt="反向代理"></p>
+<h3 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h3><p>博主域名使用Cloudflare托管，所以域名解析操作以Cloudflare为基准</p>
+<p>打开根域名的DNS界面，创建一条A记录，将子域名解析到服务器IP上，可以打开Cloudflare代理。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/d5c7bbd6813d8083683e7e8387bca0a7.png" alt="域名解析"></p>
+<h3 id="申请证书"><a href="#申请证书" class="headerlink" title="申请证书"></a>申请证书</h3><p>到这一步其实你已经可以通过子域名访问Nas了，但是由于缺少证书，大部分浏览器应该都会提示不安全，甚至直接拒绝访问，所以我们还需要申请一个证书，同样在宝塔面板中进行</p>
+<p>在站点设置界面的<code>SSL→加密</code>中点击申请即可完成自签证书的申请。自签申请的证书有效期为90天，记得定时续签</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/f82128134d2fc979099c27bbe457d7f1.png" alt="申请证书"></p>
+<p>至此，就可以通过域名直接访问处于内网中的Nas了</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AENas.png" alt="成功通过域名访问Nas"></p>
+<p>在服务器的Frp监控面板上也能看到流量正常在走</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/0c95066d04f89abfcb6da005d26a9d92.png" alt="FRP监控页面"></p>
+<h2 id="Webdav配置"><a href="#Webdav配置" class="headerlink" title="Webdav配置"></a>Webdav配置</h2><p>Nas的主要目的是存储，那么如何方便地访问Nas的硬盘呢？</p>
+<p>ZeroTier由于原理是异地组网，所以连上后可以直接在网络设备中搜索到Nas，通过smb协议访问到Nas的硬盘。</p>
+<p>而Frp原理是反代，该怎么访问到Nas的硬盘呢？这里提供一下我的方案，可能还有更好的，仅供参考</p>
+<h3 id="Nas安装Webdav服务器"><a href="#Nas安装Webdav服务器" class="headerlink" title="Nas安装Webdav服务器"></a>Nas安装Webdav服务器</h3><p>在Nas套件中心搜索Webdav，下载Webdav服务器</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/2b8ec031c195233d9497580712423ff9.png" alt="WebDAV套件"></p>
+<p>打开后记下Webdav在本地的端口，同样推荐使用HTTPS</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/76b7be369e2649028a6f1d8b85c99302.png" alt="WebDAV界面，记住这里的端口"></p>
+<h3 id="添加Frpc配置"><a href="#添加Frpc配置" class="headerlink" title="添加Frpc配置"></a>添加Frpc配置</h3><p>在Nas的frpc.toml配置文件中添加一下内容：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[webdav]</span></span><br><span class="line"><span class="attr">type</span> = tcp</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="string">&#x27;Nas上Webdav服务器的运行端口，即上面的5006&#x27;</span></span><br><span class="line"><span class="attr">remote_port</span> = <span class="string">&#x27;服务器任意空闲端口&#x27;</span></span><br><span class="line"><span class="attr">use_encryption</span> = <span class="literal">true</span></span><br><span class="line"><span class="attr">use_compression</span> = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+
+<p>之后重启一下容器配置就生效了</p>
+<h3 id="PC上下载Webdav客户端"><a href="#PC上下载Webdav客户端" class="headerlink" title="PC上下载Webdav客户端"></a>PC上下载Webdav客户端</h3><p>在需要访问Nas硬盘的PC上下载一个Webdav客户端，博主选择的是<a target="_blank" rel="noopener" href="https://www.raidrive.com/">RaiDrive</a>，一个开源免费的Webdav客户端，缺点是偶尔会跳弹窗广告，问题不大。</p>
+<p>打开RaiDrive，右上角点<code>添加</code>，<code>服务类型→Nas</code>中选择WebDAV，地址中域名填写你的服务器IP，端口填写上面绑定的服务器remote_port。账户密码填写你Nas用户的账号和密码。最后点击连接，就完成配置了</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/cc470737c011277433ac078c2510ee1f.png" alt="RaiDrive界面"></p>
+<p>之后你就可以像本地磁盘一样访问Nas的硬盘了</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/cea191749e430e3116ebec9b4bb8729d.png" alt="此电脑下多出了Nas硬盘"></p>
+<h2 id="最后一点乌云"><a href="#最后一点乌云" class="headerlink" title="最后一点乌云"></a>最后一点乌云</h2><p>通过子域名或IP+端口访问Nas都是通过HTTPS协议的，所以打开Nas上的HTTPS网页都是没问题的（人Photos等官方应用）</p>
+<p>但Nas上多数应用都是不支持HTTP的，如常用的jellyfin、Nastool，访问这些应用时无法自动由HTTPS切换到HTTP，所以无法打开。</p>
+<p>找到的一个解决方案是在Nas上再嵌套一层反向代理，将HTTPS协议下的端口访问转发给HTTP协议的访问。但实际实现却是404。等到之后找到解决方法再来更新吧！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://atelieryu.site">Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://atelieryu.site/posts/a72a568d.html">https://atelieryu.site/posts/a72a568d.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://atelieryu.site" target="_blank">Yu的炼金工房</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Nas/">Nas</a></div><div class="post-share"><div class="social-share" data-image="https://atelieryu.xyz/elog/202506/b8b24bcfd6ef35d87082dd5a4a7a0685.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://fastly.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width no-desc" href="/posts/c2de2653.html" title="机娘制作记录——FAG 短剑 Swimsuit Ver."><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/ac0acafc7727715d80e0c9811c6d4ee0.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">机娘制作记录——FAG 短剑 Swimsuit Ver.</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/PicGo/kurumi.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YVollerei"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon faa-parent animated-hover" href="https://github.com/YVollerei" target="_blank" title="Github"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-githublogo"></use></svg></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/7661819" target="_blank" title="BiliBili"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-bilibili"></use></svg></a><a class="social-icon faa-parent animated-hover" href="https://steamcommunity.com/profiles/76561198310594699/" target="_blank" title="Steam"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-steam_icon"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ZeroTier"><span class="toc-number">1.</span> <span class="toc-text">ZeroTier</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%A7%81%E4%BA%BA%E7%BD%91%E7%BB%9C"><span class="toc-number">1.1.</span> <span class="toc-text">创建私人网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PC%E6%93%8D%E4%BD%9C"><span class="toc-number">1.2.</span> <span class="toc-text">PC操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nas%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.</span> <span class="toc-text">Nas操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Moon%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.4.</span> <span class="toc-text">Moon服务器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#FRP"><span class="toc-number">2.</span> <span class="toc-text">FRP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%83%A8%E7%BD%B2%EF%BC%88FRPS%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">服务端部署（FRPS）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.1.1.</span> <span class="toc-text">创建配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker%E5%AE%89%E8%A3%85frps"><span class="toc-number">2.1.2.</span> <span class="toc-text">docker安装frps</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nas%E9%83%A8%E7%BD%B2%EF%BC%88frpc%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">Nas部署（frpc）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">创建配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85frpc"><span class="toc-number">2.2.2.</span> <span class="toc-text">安装frpc</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E7%BB%91%E5%AE%9A%E5%AD%90%E5%9F%9F%E5%90%8D"><span class="toc-number">2.3.</span> <span class="toc-text">服务器反向代理绑定子域名</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%AB%99%E7%82%B9"><span class="toc-number">2.3.1.</span> <span class="toc-text">创建站点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">2.3.2.</span> <span class="toc-text">Nginx反向代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90"><span class="toc-number">2.3.3.</span> <span class="toc-text">域名解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B3%E8%AF%B7%E8%AF%81%E4%B9%A6"><span class="toc-number">2.3.4.</span> <span class="toc-text">申请证书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Webdav%E9%85%8D%E7%BD%AE"><span class="toc-number">2.4.</span> <span class="toc-text">Webdav配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nas%E5%AE%89%E8%A3%85Webdav%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.4.1.</span> <span class="toc-text">Nas安装Webdav服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Frpc%E9%85%8D%E7%BD%AE"><span class="toc-number">2.4.2.</span> <span class="toc-text">添加Frpc配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PC%E4%B8%8A%E4%B8%8B%E8%BD%BDWebdav%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">2.4.3.</span> <span class="toc-text">PC上下载Webdav客户端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E4%B8%80%E7%82%B9%E4%B9%8C%E4%BA%91"><span class="toc-number">2.5.</span> <span class="toc-text">最后一点乌云</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/a72a568d.html" title="自建Nas内网穿透——ZeroTier/FRP"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/b8b24bcfd6ef35d87082dd5a4a7a0685.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="自建Nas内网穿透——ZeroTier/FRP"/></a><div class="content"><a class="title" href="/posts/a72a568d.html" title="自建Nas内网穿透——ZeroTier/FRP">自建Nas内网穿透——ZeroTier/FRP</a><time datetime="2025-08-04T11:21:00.000Z" title="发表于 2025-08-04 19:21:00">2025-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/c2de2653.html" title="机娘制作记录——FAG 短剑 Swimsuit Ver."><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/ac0acafc7727715d80e0c9811c6d4ee0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="机娘制作记录——FAG 短剑 Swimsuit Ver."/></a><div class="content"><a class="title" href="/posts/c2de2653.html" title="机娘制作记录——FAG 短剑 Swimsuit Ver.">机娘制作记录——FAG 短剑 Swimsuit Ver.</a><time datetime="2025-06-22T03:24:00.000Z" title="发表于 2025-06-22 11:24:00">2025-06-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/2d1c17f5.html" title="C++高性能服务器框架Sylar（三）——线程模块"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202504/480969dd9045574653c6c6d8bbfa61dc.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++高性能服务器框架Sylar（三）——线程模块"/></a><div class="content"><a class="title" href="/posts/2d1c17f5.html" title="C++高性能服务器框架Sylar（三）——线程模块">C++高性能服务器框架Sylar（三）——线程模块</a><time datetime="2025-04-02T06:40:00.000Z" title="发表于 2025-04-02 14:40:00">2025-04-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1c782469.html" title="C++高性能服务器框架Sylar（二）——配置模块"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202504/b1738be865fb17e115bb8938b3f4b2ec.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++高性能服务器框架Sylar（二）——配置模块"/></a><div class="content"><a class="title" href="/posts/1c782469.html" title="C++高性能服务器框架Sylar（二）——配置模块">C++高性能服务器框架Sylar（二）——配置模块</a><time datetime="2025-04-01T03:40:00.000Z" title="发表于 2025-04-01 11:40:00">2025-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/9da02ca5.html" title="C++高性能服务器框架Sylar（一）——日志模块"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202503/a8604dd41597308b4187f82906e13a21.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++高性能服务器框架Sylar（一）——日志模块"/></a><div class="content"><a class="title" href="/posts/9da02ca5.html" title="C++高性能服务器框架Sylar（一）——日志模块">C++高性能服务器框架Sylar（一）——日志模块</a><time datetime="2025-03-29T07:12:00.000Z" title="发表于 2025-03-29 15:12:00">2025-03-29</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://atelieryu.xyz/PicGo/footer.jpeg);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Yu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://fastly.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.atelieryu.site/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.atelieryu.site/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://fastly.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script>addEventListener("DOMContentLoaded",function(){let models=[{width:300,height:350,right:"40px",bottom:"0px",role:"/live2d_models/阿米娅/阿米娅(1).model3.json",background:"",opacity:1,mobile:false,draggable:false,scale:0.1},];new Live2dLoader(models)});</script><div class="aplayer no-destroy" data-id="13432525808" data-server="netease" data-type="playlist" data-order="random" data-fixed="true" data-preload="auto" data-autoplay="false" data-mutex="true" data-volume="0.25" data-showlrc="false" data-lrc-type="0"></div><script id="canvas_nest" defer="defer" color="106,114,255" opacity="0.7" zIndex="-1" count="100" mobile="false" src="https://fastly.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://fastly.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://fastly.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://fastly.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => fn())
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      false 
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="会搜出什么呢......" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover1.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/ACGN/&quot;);" href="javascript:void(0);">ACGN</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover2.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/学习笔记/&quot;);" href="javascript:void(0);">学习笔记</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover3.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/技术随记/&quot;);" href="javascript:void(0);">技术随记</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover4.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/模型制作/&quot;);" href="javascript:void(0);">模型制作</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var qweather_key = '3d14be69ac344084881f00a1a2ba6169';
+  var gaud_map_key = 'db9c16c529193cc3f1649f61aca0db13';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '112.982279,28.19409';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.2.2" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><script async src="/js/ali_font.js"></script><!-- hexo injector body_end end --></body></html>
