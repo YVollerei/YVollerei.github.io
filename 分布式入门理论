@@ -179,8 +179,8 @@
 <ol>
 <li>返回结果必须<strong>在合理的时间以内</strong>，这个合理的时间是根据业务来定的。业务说必须 100 毫秒内返回，合理的时间就是 100 毫秒。如果业务定的 100 毫秒，结果却在 1 秒才返回，那么这个系统就不满足可用性。</li>
 <li>需要系统内<strong>能正常接收请求的所有节点都返回结果</strong>。这包含了两重含义：<ul>
-<li>如果节点不能正常接收请求了，比如宕机了，系统崩溃了，而其他节点依然能正常接收请求，那么，我们说系统依然是可用的，也就是说，<u>部分宕机没事儿，不影响可用性指标</u>。</li>
-<li>如果节点能正常接收请求，那么<u>即使发现节点内部数据有问题，也必须返回结果</u>，哪怕返回的结果是有问题的。比如，系统有两个节点，其中有一个节点数据是三天前的，另一个节点是两分钟前的。如果一个读请求跑到了包含了三天前数据的那个节点上，抱歉，这个节点不能拒绝，必须返回这个三天前的数据，即使它可能不太合理。</li>
+<li>如果节点不能正常接收请求了，比如宕机了，系统崩溃了，而其他节点依然能正常接收请求，那么，我们说系统依然是可用的，也就是说，<u>部分宕机没事，不影响可用性指标</u>。</li>
+<li>如果节点能正常接收请求，那么<u>即使发现节点内部数据有问题，也必须返回结果</u>，哪怕返回的结果是有问题的。比如，系统有两个节点，其中有一个节点数据是三天前的，另一个节点是两分钟前的。如果一个读请求跑到了包含了三天前数据的那个节点上，抱歉，这个节点不能拒绝，必须返回这个三天前的数据，即使它可能不太合理</li>
 </ul>
 </li>
 </ol>
@@ -192,7 +192,7 @@
 <ul>
 <li>分布式的存储系统会有很多的节点，这些节点都是通过网络进行通信。而网络是不可靠的，当节点和节点之间的通信出现了问题，此时，就称当前的分布式存储系统出现了分区。</li>
 <li>值得一提的是，分区并不一定是由网络故障引起的，也可能是因为机器故障（如节点宕机，或路由器、交换机等底层网络设备出现了故障）。</li>
-<li>总之，只要在分布式系统中，**<span class='p red'>节点通信出现了问题，那么就出现了分区</span>**</li>
+<li>总之，只要在分布式系统中，<span class='p red'>节点通信出现了问题，那么就出现了分区</span></li>
 </ul>
 <p>什么是分区容忍性？</p>
 <ul>
@@ -204,7 +204,7 @@
 <li>P关注的是<strong>系统能否在网络分区时继续运行</strong>，是系统架构视角的容错能力，是对分布式系统前提的要求。</li>
 </ul>
 <h1 id="CAP的选择"><a href="#CAP的选择" class="headerlink" title="CAP的选择"></a>CAP的选择</h1><h2 id="为什么CAP只能满足其二？"><a href="#为什么CAP只能满足其二？" class="headerlink" title="为什么CAP只能满足其二？"></a>为什么CAP只能满足其二？</h2><p>如前文所述，P是分布式系统的前提要求，因为实际情况中网络分区是不可避免的。如果不选 P，一旦发生分区错误，整个分布式系统就完全无法使用了，这是不符合实际需求的</p>
-<p>而**<span class='p red'>在网络分区不可避免的情况下，一致性与可用性无法同时满足</span>**：</p>
+<p>而<span class='p red'>在网络分区不可避免的情况下，一致性与可用性无法同时满足</span>：</p>
 <ul>
 <li>想满足一致性就需要等待到分区恢复，即牺牲了可用性</li>
 <li>想满足可用性，就无法保证不同节点读取数据的一致性</li>
@@ -229,7 +229,7 @@
 </ol>
 <h1 id="CAP的一些注意点"><a href="#CAP的一些注意点" class="headerlink" title="CAP的一些注意点"></a>CAP的一些注意点</h1><h2 id="C或A在没有网络分区时可以共存"><a href="#C或A在没有网络分区时可以共存" class="headerlink" title="C或A在没有网络分区时可以共存"></a>C或A在没有网络分区时可以共存</h2><p>CAP理论的核心限制是：在网络分区（节点间通信中断或延迟）时，系统必须在一致性和可用性之间二选一。</p>
 <p>由此可见，CAP的核心矛盾仅在网络分区（P）发生时才被触发。所以，当网络正常（无分区）时，系统必须同时保证一致性（C）和可用性（A）。具体而言，系统既可以通过同步机制保证一致性，又能及时响应请求，保证可用性。此时<strong>C和A可以共存</strong>。</p>
-<p>总而言之，**<span class='p red'>当没有出现分区问题的时候，系统就应该有完美的数据一致性和可用性。</span>**</p>
+<p>总而言之，<span class='p red'>当没有出现分区问题的时候，系统就应该有完美的数据一致性和可用性。</span></p>
 <h2 id="C和A的抉择是局部性的"><a href="#C和A的抉择是局部性的" class="headerlink" title="C和A的抉择是局部性的"></a>C和A的抉择是局部性的</h2><p>当分区发生的时候，其实对一致性和可用性的抉择是局部性的，而不是针对整个系统的：可能是在一些子系统做一些抉择，甚至很可能只需要对某个事件或者数据，做一致性和可用性的抉择而已。</p>
 <p>比如，当我们做一套支付系统的时候，会员的财务相关像账户余额，账务流水是必须强一致性的。这时候，你就要考虑选 C。但是，会员的名字，会员的支付设置就不必考虑强一致性，可以选择可用性 A。</p>
 <h2 id="CAP特性是一个范围，而非是与否的极端选择"><a href="#CAP特性是一个范围，而非是与否的极端选择" class="headerlink" title="CAP特性是一个范围，而非是与否的极端选择"></a>CAP特性是一个范围，而非是与否的极端选择</h2><p>CAP 理论的三种特性不是 Boolean 类型的，不是一致和不一致，可用和不可用，分区和没分区的这类二选一的选项。而是强一致性和弱一致性，高可用和低可用，高容错和低容错的范围变化：</p>
@@ -458,7 +458,7 @@
 })()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="会搜出什么呢......" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
     function butterfly_categories_card_injector_config(){
       var parent_div_git = document.getElementById('recent-posts');
-      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover1.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/ACGN/&quot;);" href="javascript:void(0);">ACGN</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover2.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/学习笔记/&quot;);" href="javascript:void(0);">学习笔记</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover3.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/技术随记/&quot;);" href="javascript:void(0);">技术随记</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover4.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/模型制作/&quot;);" href="javascript:void(0);">模型制作</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover1.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/ACGN/&quot;);" href="javascript:void(0);">ACGN</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover2.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/学习笔记/&quot;);" href="javascript:void(0);">学习笔记</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover3.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/模型制作/&quot;);" href="javascript:void(0);">模型制作</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(https://atelieryu.xyz/PicGo/cover4.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/技术随记/&quot;);" href="javascript:void(0);">技术随记</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
       console.log('已挂载butterfly_categories_card')
       parent_div_git.insertAdjacentHTML("afterbegin",item_html)
       }
