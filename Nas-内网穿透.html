@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>自建Nas内网穿透——ZeroTier/FRP | Yu的炼金工房</title><meta name="author" content="Yu"><meta name="copyright" content="Yu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="六月份入手了一台群晖Nas。由于群晖自带的内网穿透不太好用（连接不稳定，无法访问套件），所以准备自己搭内网穿透，尝试了几种方法，简单记录一下。 ZeroTierZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。 创">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>自建Nas内网穿透——ZeroTier/FRP | Yu的炼金工房</title><meta name="author" content="Yu"><meta name="copyright" content="Yu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="六月份入手了一台群晖Nas。由于群晖自带的内网穿透不太好用（连接不稳定，无法访问套件），所以准备自己搭内网穿透，尝试了几种方法，简单记录一下。 ZeroTierZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。 创">
 <meta property="og:type" content="article">
 <meta property="og:title" content="自建Nas内网穿透——ZeroTier&#x2F;FRP">
 <meta property="og:url" content="https://atelieryu.site/Nas-%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F.html">
 <meta property="og:site_name" content="Yu的炼金工房">
-<meta property="og:description" content="六月份入手了一台群晖Nas。由于群晖自带的内网穿透不太好用（连接不稳定，无法访问套件），所以准备自己搭内网穿透，尝试了几种方法，简单记录一下。 ZeroTierZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。 创">
+<meta property="og:description" content="六月份入手了一台群晖Nas。由于群晖自带的内网穿透不太好用（连接不稳定，无法访问套件），所以准备自己搭内网穿透，尝试了几种方法，简单记录一下。 ZeroTierZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。 创">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://atelieryu.xyz/elog/202506/b8b24bcfd6ef35d87082dd5a4a7a0685.gif">
 <meta property="article:published_time" content="2025-08-04T11:21:00.000Z">
@@ -159,9 +159,9 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><script src="https://fastly.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script><link rel="stylesheet" href="/css/corner-indicator.css" /><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script><script src="https://fastly.jsdelivr.net/combine/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js,npm/pixi.js@6.5.2/dist/browser/pixi.min.js,npm/pixi-live2d-display/dist/index.min.js,gh/Weidows-projects/Live2dLoader/dist/Live2dLoader.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/css/runtime/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Yu的炼金工房" type="application/atom+xml">
+}</script><script src="https://fastly.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script><link rel="stylesheet" href="/css/corner-indicator.css" /><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script><script src="https://fastly.jsdelivr.net/combine/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js,npm/pixi.js@6.5.2/dist/browser/pixi.min.js,npm/pixi-live2d-display/dist/index.min.js,gh/Weidows-projects/Live2dLoader/dist/Live2dLoader.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/css/runtime/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Yu的炼金工房" type="application/atom+xml">
 </head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/PicGo/kurumi.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shouye"></use></svg><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/bangumis/index.html"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-bilibili-pink"></use></svg><span> 追番</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-xinfeng"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-chaxun"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://atelieryu.xyz/elog/202506/b8b24bcfd6ef35d87082dd5a4a7a0685.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/PicGo/shizuku_logo.png" alt="Logo"><span class="site-name">Yu的炼金工房</span></a><a class="nav-page-title" href="/"><span class="site-name">自建Nas内网穿透——ZeroTier/FRP</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shouye"></use></svg><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/bangumis/index.html"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-bilibili-pink"></use></svg><span> 追番</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-xinfeng"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-chaxun"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">自建Nas内网穿透——ZeroTier/FRP</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-04T11:21:00.000Z" title="发表于 2025-08-04 19:21:00">2025-08-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-05T12:35:00.000Z" title="更新于 2025-08-05 20:35:00">2025-08-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E9%9A%8F%E8%AE%B0/">技术随记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.5k</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>六月份入手了一台群晖Nas。由于群晖自带的内网穿透不太好用（连接不稳定，无法访问套件），所以准备自己搭内网穿透，尝试了几种方法，简单记录一下。</p>
-<h1 id="ZeroTier"><a href="#ZeroTier" class="headerlink" title="ZeroTier"></a>ZeroTier</h1><p>ZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。</p>
+<h1 id="ZeroTier"><a href="#ZeroTier" class="headerlink" title="ZeroTier"></a>ZeroTier</h1><p>ZeroTier是一款强大的P2P VPN工具，它可以让你搭建虚拟局域网（异地组网）。其优点之一是设备之间是点对点直连的，经过中转服务器握手后，设备间进行P2P传输，既保证了速度，又提升了安全性。在设备间跳数较小的情况下是个不错的选择。</p>
 <h2 id="创建私人网络"><a href="#创建私人网络" class="headerlink" title="创建私人网络"></a>创建私人网络</h2><p>首先在ZeroTier<a target="_blank" rel="noopener" href="https://my.zerotier.com/">控制台</a>注册一个账号，点击Create Network创建网络。</p>
 <p>记住这里的NETWORK ID，它是你的私人网络在互联网中的标识</p>
 <p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/ee353de79fbaf07c1a966137fd292a95.png" alt="ZeroTier控制台首页"></p>
@@ -190,18 +190,24 @@
 </ul>
 <h2 id="服务端部署（FRPS）"><a href="#服务端部署（FRPS）" class="headerlink" title="服务端部署（FRPS）"></a>服务端部署（FRPS）</h2><p>服务端就是你用来做反向代理的服务器。</p>
 <h3 id="创建配置文件"><a href="#创建配置文件" class="headerlink" title="创建配置文件"></a>创建配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建存放目录</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /etc/frp</span><br><span class="line"><span class="comment"># 创建frps.toml文件</span></span><br><span class="line">nano /etc/frp/frps.toml</span><br></pre></td></tr></table></figure>
+
+
 <p>frps.toml配置文件内容参考（虽然是toml，但为了兼容性仍然使用ini文件的格式）：</p>
 <figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="comment"># 监听端口</span></span><br><span class="line"><span class="attr">bind_port</span> = xxxxx</span><br><span class="line"><span class="comment"># 面板端口</span></span><br><span class="line"><span class="attr">dashboard_port</span> = xxxxx</span><br><span class="line"><span class="comment"># 登录面板账号设置</span></span><br><span class="line"><span class="attr">dashboard_user</span> = xxxxx</span><br><span class="line"><span class="attr">dashboard_pwd</span> = xxxxx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 身份验证</span></span><br><span class="line"><span class="attr">token</span> = xxxxxx</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>bind_port：监听端口，frp通过该端口提供反向代理服务，推荐修改为一个小众端口</li>
 <li>dashboard_port：面板端口，用于frp流量监控，保持默认即可</li>
 <li>token：身份验证，frp客户端配置文件中填入相同token才能获取frps服务，能一定程度提升安全性</li>
 </ul>
 <h3 id="docker安装frps"><a href="#docker安装frps" class="headerlink" title="docker安装frps"></a>docker安装frps</h3><figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#服务器镜像：snowdreamtech/frps</span></span><br><span class="line"><span class="comment">#重启：always</span></span><br><span class="line"><span class="comment">#网络模式：host</span></span><br><span class="line"><span class="comment">#文件映射：/etc/frp/frps.toml:/etc/frp/frps.toml</span></span><br><span class="line"></span><br><span class="line">docker run <span class="attr">--restart</span>=always --network host -d -v /etc/frp/frps.toml:/etc/frp/frps.toml --name frps snowdreamtech/frps</span><br></pre></td></tr></table></figure>
+
+
 <p>这样frps就配置完成了</p>
 <h2 id="Nas部署（frpc）"><a href="#Nas部署（frpc）" class="headerlink" title="Nas部署（frpc）"></a>Nas部署（frpc）</h2><h3 id="创建配置文件-1"><a href="#创建配置文件-1" class="headerlink" title="创建配置文件"></a>创建配置文件</h3><p>在docker文件夹下创建frp文件夹，并在目录下新建一个frpc.toml文件</p>
 <p>frpc.toml配置文件内容参考：</p>
 <figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">server_addr</span> = <span class="string">&#x27;你的服务器公网IP&#x27;</span></span><br><span class="line"><span class="attr">server_port</span> = <span class="string">&#x27;服务器frps.toml配置文件中设置的bind_port&#x27;</span></span><br><span class="line"><span class="attr">token</span> = <span class="string">&#x27;服务器frps.toml配置文件中设置的token&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dsm]</span></span><br><span class="line"><span class="attr">type</span> = tcp</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="string">&#x27;dsm登录端口&#x27;</span></span><br><span class="line"><span class="attr">remote_port</span> = <span class="string">&#x27;服务器上任意空闲端口&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>[common]<ul>
 <li>frpc通用配置，按注释中配置即可</li>
@@ -248,6 +254,8 @@
 <p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://atelieryu.xyz/elog/202506/76b7be369e2649028a6f1d8b85c99302.png" alt="WebDAV界面，记住这里的端口"></p>
 <h3 id="添加Frpc配置"><a href="#添加Frpc配置" class="headerlink" title="添加Frpc配置"></a>添加Frpc配置</h3><p>在Nas的frpc.toml配置文件中添加一下内容：</p>
 <figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[webdav]</span></span><br><span class="line"><span class="attr">type</span> = tcp</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="string">&#x27;Nas上Webdav服务器的运行端口，即上面的5006&#x27;</span></span><br><span class="line"><span class="attr">remote_port</span> = <span class="string">&#x27;服务器任意空闲端口&#x27;</span></span><br><span class="line"><span class="attr">use_encryption</span> = <span class="literal">true</span></span><br><span class="line"><span class="attr">use_compression</span> = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+
 <p>之后重启一下容器配置就生效了</p>
 <h3 id="PC上下载Webdav客户端"><a href="#PC上下载Webdav客户端" class="headerlink" title="PC上下载Webdav客户端"></a>PC上下载Webdav客户端</h3><p>在需要访问Nas硬盘的PC上下载一个Webdav客户端，博主选择的是<a target="_blank" rel="noopener" href="https://www.raidrive.com/">RaiDrive</a>，一个开源免费的Webdav客户端，缺点是偶尔会跳弹窗广告，问题不大。</p>
 <p>打开RaiDrive，右上角点<code>添加</code>，<code>服务类型→Nas</code>中选择WebDAV，地址中域名填写你的服务器IP，端口填写上面绑定的服务器remote_port。账户密码填写你Nas用户的账号和密码。最后点击连接，就完成配置了</p>
@@ -393,6 +401,30 @@
     butterfly_categories_card_injector_config()
     }
   </script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.2.2" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script data-pjax>
   function butterfly_clock_anzhiyu_injector_config(){
     var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
     var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
@@ -423,31 +455,7 @@
   else if (epage === cpage){
     butterfly_clock_anzhiyu_injector_config();
   }
-  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><script data-pjax>
-  function butterfly_footer_beautify_injector_config(){
-    var parent_div_git = document.getElementById('footer-wrap');
-    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.2.2" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
-    console.log('已挂载butterfly_footer_beautify')
-    parent_div_git.insertAdjacentHTML("beforeend",item_html)
-    }
-  var elist = 'null'.split(',');
-  var cpage = location.pathname;
-  var epage = 'all';
-  var flag = 0;
-
-  for (var i=0;i<elist.length;i++){
-    if (cpage.includes(elist[i])){
-      flag++;
-    }
-  }
-
-  if ((epage ==='all')&&(flag == 0)){
-    butterfly_footer_beautify_injector_config();
-  }
-  else if (epage === cpage){
-    butterfly_footer_beautify_injector_config();
-  }
-  </script><script async src="/js/ali_font.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
 for(var i = 0;i<arr.length;i++){
     arr[i].classList.add('wow');
     arr[i].classList.add('animate__zoomIn');
@@ -503,4 +511,4 @@ for(var i = 0;i<arr.length;i++){
     arr[i].setAttribute('data-wow-delay', '');
     arr[i].setAttribute('data-wow-offset', '');
     arr[i].setAttribute('data-wow-iteration', '');
-  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><script async src="/js/ali_font.js"></script><!-- hexo injector body_end end --></body></html>
